@@ -6,6 +6,21 @@ const app = express();
 
 app.use(express.json());
 
+app.use((req, res, next) => {
+  const date = new Date();
+  const method = `[${req.method}]`;
+  const time = `[${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}]`;
+  const url = ` ${req.url} `;
+  const body =
+    req.method === "PUT" || req.method === "POST"
+      ? JSON.stringify(req.body)
+      : "";
+
+  console.log(`${method}${time}${url}${body}`);
+
+  next();
+});
+
 app.get("/programming_languages", async (req, res) => {
   const programmingLanguages = await prisma.programmingLanguage.findMany({});
 
