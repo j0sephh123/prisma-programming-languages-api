@@ -1,17 +1,18 @@
 import { Router } from "express";
-import { PrismaClient } from "@prisma/client";
-
-const prisma = new PrismaClient();
+import { PrismaType } from "./types";
+import { getTypedPrisma } from "./utils";
 
 const router = Router();
 
 router.get("/", async (req, res) => {
+  const prisma = getTypedPrisma(req.app.get("prisma"));
   const programmingLanguages = await prisma.programmingLanguage.findMany({});
 
   return res.status(200).json(programmingLanguages);
 });
 
 router.get("/:id", async (req, res) => {
+  const prisma = getTypedPrisma(req.app.get("prisma"));
   const { id } = req.params;
 
   try {
@@ -30,6 +31,7 @@ router.get("/:id", async (req, res) => {
 });
 
 router.post("/", async (req, res) => {
+  const prisma = getTypedPrisma(req.app.get("prisma"));
   const { name, type } = req.body;
 
   if (!name) {
@@ -65,6 +67,7 @@ router.post("/", async (req, res) => {
 });
 
 router.delete("/:id", async (req, res) => {
+  const prisma = getTypedPrisma(req.app.get("prisma"));
   const { id } = req.params;
 
   try {
@@ -84,6 +87,7 @@ router.delete("/:id", async (req, res) => {
 });
 
 router.put("/:id", async (req, res) => {
+  const prisma = getTypedPrisma(req.app.get("prisma"));
   const { id } = req.params;
   const { name, type } = req.body;
 
